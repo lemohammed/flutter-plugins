@@ -37,3 +37,4 @@ part 'src/polygon.dart';
 part 'src/polygons.dart';
 part 'src/polyline.dart';
 part 'src/polylines.dart';
+part 'src/web_image.dart';
