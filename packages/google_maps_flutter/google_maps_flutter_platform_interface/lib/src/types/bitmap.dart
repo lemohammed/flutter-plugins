@@ -130,23 +130,32 @@ class BitmapDescriptor {
     String? package,
     bool mipmaps = true,
   }) async {
-    final double? devicePixelRatio = configuration.devicePixelRatio;
-    if (!mipmaps && devicePixelRatio != null) {
-      return BitmapDescriptor._(<Object>[
-        _fromAssetImage,
-        assetName,
-        devicePixelRatio,
-      ]);
+    if (kIsWeb) {
+      // JS Maps will display in logical pixels.
+      configuration = configuration.copyWith(devicePixelRatio: 1);
     }
-    final AssetImage assetImage =
-        AssetImage(assetName, package: package, bundle: bundle);
-    final AssetBundleImageKey assetBundleImageKey =
-        await assetImage.obtainKey(configuration);
+
+    final double? devicePixelRatio = configuration.devicePixelRatio;
+    final String asset;
+    final double scale;
+
+    if (!mipmaps && devicePixelRatio != null) {
+      asset = assetName;
+      scale = devicePixelRatio;
+    } else {
+      final AssetImage assetImage =
+          AssetImage(assetName, package: package, bundle: bundle);
+      final AssetBundleImageKey assetBundleImageKey =
+          await assetImage.obtainKey(configuration);
+      asset = assetBundleImageKey.name;
+      scale = (devicePixelRatio ?? 1) / assetBundleImageKey.scale;
+    }
+
     final Size? size = configuration.size;
     return BitmapDescriptor._(<Object>[
       _fromAssetImage,
-      assetBundleImageKey.name,
-      assetBundleImageKey.scale,
+      asset,
+      scale,
       if (kIsWeb && size != null)
         <Object>[
           size.width,
