@@ -290,11 +290,10 @@ gmaps.MarkerOptions _markerOptionsFromMarker(
   gmaps.Marker? currentMarker,
 ) {
   return gmaps.MarkerOptions()
-    ..position = currentMarker?.position ??
-        gmaps.LatLng(
-          marker.position.latitude,
-          marker.position.longitude,
-        )
+       ..position = gmaps.LatLng(
+      marker.position.latitude,
+      marker.position.longitude,
+    )
     ..title = sanitizeHtml(marker.infoWindow.title ?? '')
     ..zIndex = marker.zIndex
     ..visible = marker.visible
