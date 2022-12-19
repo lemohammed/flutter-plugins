@@ -1,1 +1,0 @@
-../../shared/Classes/FIAPReceiptManager.m
